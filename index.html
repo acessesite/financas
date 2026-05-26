@@ -33,15 +33,30 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .sync-dot.loading{background:var(--amber);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* GASTOS FIXOS BANNER */
+.fixos-banner{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.fixos-info{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.fixos-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.fixos-items{display:flex;gap:.5rem;flex-wrap:wrap}
+.fixo-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:.72rem;background:var(--surface3);border:1px solid var(--border2);color:var(--muted)}
+.fixo-pill span{color:var(--red);font-family:'DM Mono',monospace;font-weight:500}
+.fixos-total{font-family:'DM Mono',monospace;font-size:.8rem;color:var(--muted);white-space:nowrap}
+.fixos-total strong{color:var(--red)}
+
+.btn-fixos{display:flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s;border:1.5px solid var(--border2);background:transparent;color:var(--muted);white-space:nowrap}
+.btn-fixos:hover{border-color:var(--accent);color:var(--accent)}
+.btn-fixos.applied{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+.btn-fixos .icon{font-size:1rem}
+
 .container{max-width:1100px;margin:0 auto;padding:1.5rem 2rem}
-.grid-top{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem}
+.grid-top{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem}
 .grid-main{display:grid;grid-template-columns:1fr 360px;gap:1rem}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
 
 .metric{position:relative;overflow:hidden}
 .metric-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.3rem}
 .metric-value{font-family:'DM Mono',monospace;font-size:1.35rem;font-weight:500;line-height:1}
-.metric-value.green{color:var(--green)}.metric-value.red{color:var(--red)}.metric-value.amber{color:var(--amber)}.metric-value.blue{color:var(--blue)}
+.metric-value.green{color:var(--green)}.metric-value.red{color:var(--red)}.metric-value.blue{color:var(--blue)}
 .metric-sub{font-size:.68rem;color:var(--muted);margin-top:.3rem}
 .metric-bar{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border)}
 .metric-bar-fill{height:100%;border-radius:1px;transition:width .5s ease}
@@ -81,6 +96,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .txn-info{flex:1;min-width:0}
 .txn-name{font-size:.82rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .txn-cat{font-size:.68rem;color:var(--muted)}
+.txn-fixo-badge{font-size:.6rem;background:var(--surface3);border:1px solid var(--border2);color:var(--muted);padding:1px 5px;border-radius:4px;margin-left:4px}
 .txn-val{font-family:'DM Mono',monospace;font-size:.82rem;white-space:nowrap;font-weight:500}
 .txn-del{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:.9rem;padding:2px 4px;border-radius:4px;transition:color .1s}
 .txn-del:hover{color:var(--red)}
@@ -119,7 +135,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .summary-row span:last-child{font-family:'DM Mono',monospace;font-size:.75rem}
 
 @media(max-width:860px){.grid-top{grid-template-columns:1fr 1fr}.grid-main{grid-template-columns:1fr}.container{padding:1rem}}
-@media(max-width:500px){.grid-top{grid-template-columns:1fr}.header{padding:.9rem 1rem}}
+@media(max-width:500px){.grid-top{grid-template-columns:1fr}.header{padding:.9rem 1rem}.fixos-banner{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
@@ -138,8 +154,29 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 </header>
 
 <div class="container">
+
+  <!-- GASTOS FIXOS BANNER -->
+  <div class="fixos-banner">
+    <div class="fixos-info">
+      <div>
+        <div class="fixos-label">Gastos fixos do mês</div>
+        <div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:.4rem">
+          <span class="fixo-pill">Wi-Fi <span>R$ 70</span></span>
+          <span class="fixo-pill">TV <span>R$ 35</span></span>
+          <span class="fixo-pill">Alimentação <span>R$ 300</span></span>
+          <span class="fixo-pill">Plano <span>R$ 130</span></span>
+        </div>
+      </div>
+      <div class="fixos-total">Total fixo: <strong>R$ 535,00</strong></div>
+    </div>
+    <button class="btn-fixos" id="btnFixos" onclick="toggleFixos()">
+      <span class="icon">📌</span>
+      <span id="btnFixosText">Aplicar ao mês</span>
+    </button>
+  </div>
+
+  <!-- METRICS -->
   <div class="grid-top" id="metricsRow">
-    <div class="card metric"><div class="loading-overlay">carregando...</div></div>
     <div class="card metric"><div class="loading-overlay">carregando...</div></div>
     <div class="card metric"><div class="loading-overlay">carregando...</div></div>
     <div class="card metric"><div class="loading-overlay">carregando...</div></div>
@@ -147,6 +184,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 
   <div class="grid-main">
     <div>
+      <!-- NOVO LANÇAMENTO -->
       <div class="card" style="margin-bottom:1rem">
         <div class="section-title">Novo lançamento</div>
         <div class="tipo-toggle">
@@ -165,6 +203,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
         <button class="btn-add" id="btnAdicionar" onclick="addTransaction()">Adicionar lançamento</button>
       </div>
 
+      <!-- GRÁFICO -->
       <div class="card" style="margin-bottom:1rem">
         <div class="section-title">Fluxo dia a dia</div>
         <div class="chart-bars" id="dailyChart"></div>
@@ -174,6 +213,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
         </div>
       </div>
 
+      <!-- LISTA -->
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
           <div class="section-title" style="margin-bottom:0;flex:1">Lançamentos do mês</div>
@@ -190,6 +230,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
       </div>
     </div>
 
+    <!-- PAINEL LATERAL -->
     <div>
       <div class="card" style="margin-bottom:1rem">
         <div class="tabs">
@@ -260,15 +301,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
   </div>
 </div>
 
-<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import {
   getFirestore, collection, doc, addDoc, deleteDoc, setDoc, getDoc,
-  onSnapshot, query, orderBy
+  onSnapshot, query, orderBy, writeBatch
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-// ─── FIREBASE CONFIG ──────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyD7iMO2tql-O6X6q303ZAqNOzhl-g9WyBM",
   authDomain: "financas-5c425.firebaseapp.com",
@@ -281,6 +320,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// ─── GASTOS FIXOS ─────────────────────────────────────────
+const GASTOS_FIXOS = [
+  {desc:'Wi-Fi',     val:70,  cat:'Outros',      nota:'Gasto fixo'},
+  {desc:'TV',        val:35,  cat:'Lazer',        nota:'Gasto fixo'},
+  {desc:'Alimentação',val:300,cat:'Alimentação',  nota:'Gasto fixo'},
+  {desc:'Plano',     val:130, cat:'Outros',       nota:'Gasto fixo'},
+];
+
 // ─── STATE ────────────────────────────────────────────────
 const now = new Date();
 let viewYear = now.getFullYear();
@@ -289,12 +336,12 @@ let currentTipo = 'receita';
 let depositTargetId = null;
 let transactions = [];
 let goals = [];
+let fixosAplicados = {}; // { "2026-05": true }
 let categories = {
   receita:[{name:'Salário',color:'#3ddc97'},{name:'Freelance',color:'#5b8af5'},{name:'Investimentos',color:'#c8ff00'},{name:'Outros',color:'#7a7a8c'}],
-  despesa:[{name:'Alimentação',color:'#ff5f5f'},{name:'Transporte',color:'#f5a623'},{name:'Saúde',color:'#ff8c5f'},{name:'Educação',color:'#a78bfa'},{name:'Lazer',color:'#f472b6'},{name:'Vestuário',color:'#6ee7b7'},{name:'Outros',color:'#7a7a8c'}]
+  despesa:[{name:'Alimentação',color:'#ff5f5f'},{name:'Transporte',color:'#f5a623'},{name:'Saúde',color:'#ff8c5f'},{name:'Educação',color:'#a78bfa'},{name:'Lazer',color:'#f472b6'},{name:'Outros',color:'#7a7a8c'}]
 };
 
-// ─── UTILS ────────────────────────────────────────────────
 function fmt(v){return 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fmtDate(d){if(!d)return'';const[y,m,dd]=d.split('-');return dd+'/'+m;}
 function monthKey(d){return d?d.slice(0,7):'';}
@@ -302,8 +349,7 @@ function currentMK(){return viewYear+'-'+String(viewMonth+1).padStart(2,'0');}
 function daysInMonth(y,m){return new Date(y,m+1,0).getDate();}
 function catColor(tipo,name){return(categories[tipo]||[]).find(c=>c.name===name)?.color||'#7a7a8c';}
 function monthName(y,m){const s=new Date(y,m,1).toLocaleDateString('pt-BR',{month:'long',year:'numeric'});return s.charAt(0).toUpperCase()+s.slice(1);}
-
-function setSyncStatus(state, text){
+function setSyncStatus(state,text){
   const dot=document.getElementById('syncDot');
   const txt=document.getElementById('syncText');
   dot.className='sync-dot '+state;
@@ -311,11 +357,62 @@ function setSyncStatus(state, text){
   txt.style.color=state==='ok'?'var(--green)':state==='err'?'var(--red)':'var(--muted)';
 }
 
+// ─── GASTOS FIXOS TOGGLE ──────────────────────────────────
+window.toggleFixos = async function(){
+  const mk = currentMK();
+  const jaAplicado = fixosAplicados[mk];
+
+  if(jaAplicado){
+    // Remove os fixos do mês atual
+    if(!confirm('Remover os gastos fixos deste mês?'))return;
+    const paraRemover = transactions.filter(t => t.data.startsWith(mk) && t.fixo === true);
+    const batch = writeBatch(db);
+    paraRemover.forEach(t => batch.delete(doc(db,'transactions',t.id)));
+    delete fixosAplicados[mk];
+    await batch.commit();
+    await setDoc(doc(db,'config','fixosAplicados'), fixosAplicados);
+  } else {
+    // Aplica os fixos no dia 1 do mês
+    const dia1 = mk + '-01';
+    const batch = writeBatch(db);
+    GASTOS_FIXOS.forEach(f => {
+      const ref = doc(collection(db,'transactions'));
+      batch.set(ref, {
+        desc: f.desc,
+        val: f.val,
+        tipo: 'despesa',
+        cat: f.cat,
+        data: dia1,
+        nota: f.nota,
+        fixo: true,
+        criadoEm: new Date().toISOString()
+      });
+    });
+    fixosAplicados[mk] = true;
+    await batch.commit();
+    await setDoc(doc(db,'config','fixosAplicados'), fixosAplicados);
+  }
+  updateFixosBtnState();
+};
+
+function updateFixosBtnState(){
+  const mk = currentMK();
+  const aplicado = fixosAplicados[mk];
+  const btn = document.getElementById('btnFixos');
+  const txt = document.getElementById('btnFixosText');
+  if(aplicado){
+    btn.className = 'btn-fixos applied';
+    txt.textContent = 'Fixos aplicados ✓';
+  } else {
+    btn.className = 'btn-fixos';
+    txt.textContent = 'Aplicar ao mês';
+  }
+}
+
 // ─── FIRESTORE LISTENERS ──────────────────────────────────
 function startListeners(){
   setSyncStatus('loading','Conectando...');
 
-  // Transactions
   const txnQ = query(collection(db,'transactions'), orderBy('data','desc'));
   onSnapshot(txnQ, snap => {
     transactions = snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -326,21 +423,22 @@ function startListeners(){
     setSyncStatus('err','Erro de conexão');
   });
 
-  // Goals
   onSnapshot(collection(db,'goals'), snap => {
     goals = snap.docs.map(d=>({id:d.id,...d.data()}));
     renderGoals();
   });
 
-  // Categories
   getDoc(doc(db,'config','categories')).then(d=>{
     if(d.exists()){categories=d.data();}
-    syncCatSelect();
-    renderCategoryManager();
+    syncCatSelect();renderCategoryManager();
+  });
+
+  getDoc(doc(db,'config','fixosAplicados')).then(d=>{
+    if(d.exists()){fixosAplicados=d.data();}
+    updateFixosBtnState();
   });
 }
 
-// ─── SAVE CATEGORIES ─────────────────────────────────────
 async function saveCategories(){
   await setDoc(doc(db,'config','categories'), categories);
 }
@@ -351,11 +449,11 @@ function init(){
   document.getElementById('f-data').value = now.toISOString().slice(0,10);
   document.getElementById('prevMonth').onclick = () => {
     viewMonth--; if(viewMonth<0){viewMonth=11;viewYear--;}
-    updateMonthHeader();renderAll();
+    updateMonthHeader();renderAll();updateFixosBtnState();
   };
   document.getElementById('nextMonth').onclick = () => {
     viewMonth++; if(viewMonth>11){viewMonth=0;viewYear++;}
-    updateMonthHeader();renderAll();
+    updateMonthHeader();renderAll();updateFixosBtnState();
   };
   startListeners();
 }
@@ -374,7 +472,7 @@ function renderAll(){
   populateFilterCat();
 }
 
-// ─── TIPO TOGGLE ─────────────────────────────────────────
+// ─── TIPO TOGGLE ──────────────────────────────────────────
 window.setTipo = function(tipo){
   currentTipo=tipo;
   document.getElementById('btn-receita').className='tipo-btn'+(tipo==='receita'?' active-receita':'');
@@ -401,7 +499,9 @@ window.addTransaction = async function(){
   const btn=document.getElementById('btnAdicionar');
   btn.disabled=true;btn.textContent='Salvando...';
   try{
-    await addDoc(collection(db,'transactions'),{desc,val,tipo:currentTipo,cat,data,nota,criadoEm:new Date().toISOString()});
+    await addDoc(collection(db,'transactions'),{
+      desc,val,tipo:currentTipo,cat,data,nota,fixo:false,criadoEm:new Date().toISOString()
+    });
     document.getElementById('f-desc').value='';
     document.getElementById('f-val').value='';
     document.getElementById('f-nota').value='';
@@ -414,7 +514,7 @@ window.deleteTransaction = async function(id){
   await deleteDoc(doc(db,'transactions',id));
 };
 
-// ─── METRICS ──────────────────────────────────────────────
+// ─── METRICS (3 cards, sem patrimônio) ────────────────────
 function renderMetrics(){
   const mk=currentMK();
   const list=transactions.filter(t=>monthKey(t.data)===mk);
@@ -422,13 +522,11 @@ function renderMetrics(){
   const desp=list.filter(t=>t.tipo==='despesa').reduce((a,b)=>a+b.val,0);
   const saldo=rec-desp;
   const taxa=rec>0?Math.round(saldo/rec*100):0;
-  const patrimonio=transactions.reduce((a,b)=>a+(b.tipo==='receita'?b.val:-b.val),0);
 
   const cards=[
     {label:'Receitas do mês',value:fmt(rec),cls:'green',fill:100,color:'var(--green)',sub:`${list.filter(t=>t.tipo==='receita').length} lançamentos`},
     {label:'Despesas do mês',value:fmt(desp),cls:'red',fill:rec>0?Math.min(100,Math.round(desp/rec*100)):0,color:'var(--red)',sub:`${list.filter(t=>t.tipo==='despesa').length} lançamentos`},
     {label:'Saldo do mês',value:fmt(saldo),cls:saldo>=0?'green':'red',fill:Math.min(100,Math.abs(taxa)),color:saldo>=0?'var(--green)':'var(--red)',sub:`Taxa de economia: ${taxa}%`},
-    {label:'Patrimônio total',value:fmt(patrimonio),cls:patrimonio>=0?'blue':'red',fill:100,color:'var(--blue)',sub:'Acumulado geral'},
   ];
   document.getElementById('metricsRow').innerHTML=cards.map(c=>`
     <div class="card metric">
@@ -500,7 +598,7 @@ window.renderTxnList = function(){
       html+=`<div class="txn-item">
         <div class="txn-dot" style="background:${catColor(t.tipo,t.cat)}"></div>
         <div class="txn-info">
-          <div class="txn-name">${t.desc}${t.nota?` <span style="font-size:.66rem;color:var(--muted)">· ${t.nota}</span>`:''}</div>
+          <div class="txn-name">${t.desc}${t.fixo?'<span class="txn-fixo-badge">fixo</span>':''}${t.nota&&!t.fixo?` <span style="font-size:.66rem;color:var(--muted)">· ${t.nota}</span>`:''}</div>
           <div class="txn-cat">${t.cat}</div>
         </div>
         <div class="txn-val" style="color:${t.tipo==='receita'?'var(--green)':'var(--red)'}">${t.tipo==='receita'?'+':'-'}${fmt(t.val)}</div>
@@ -570,7 +668,7 @@ window.addCategory = async function(){
 
 window.deleteCategory = async function(tipo,name){
   const inUse=transactions.some(t=>t.tipo===tipo&&t.cat===name);
-  if(inUse&&!confirm(`Categoria "${name}" tem lançamentos vinculados. Remover assim mesmo?`))return;
+  if(inUse&&!confirm(`Categoria "${name}" tem lançamentos. Remover assim mesmo?`))return;
   categories[tipo]=categories[tipo].filter(c=>c.name!==name);
   await saveCategories();
   renderCategoryManager();syncCatSelect();populateFilterCat();renderAll();
@@ -660,10 +758,14 @@ function renderMonthlySummary(){
   const despCats={};
   list.filter(t=>t.tipo==='despesa').forEach(t=>{despCats[t.cat]=(despCats[t.cat]||0)+t.val;});
   const topCat=Object.entries(despCats).sort((a,b)=>b[1]-a[1])[0];
+  const fixosTotal=list.filter(t=>t.fixo===true&&t.tipo==='despesa').reduce((a,b)=>a+b.val,0);
+  const variaveis=desp-fixosTotal;
 
   document.getElementById('monthly-summary').innerHTML=`
     <div class="summary-row"><span>Total receitas</span><span style="color:var(--green)">${fmt(rec)}</span></div>
     <div class="summary-row"><span>Total despesas</span><span style="color:var(--red)">${fmt(desp)}</span></div>
+    <div class="summary-row"><span>↳ Gastos fixos</span><span style="color:var(--muted)">${fmt(fixosTotal)}</span></div>
+    <div class="summary-row"><span>↳ Variáveis</span><span style="color:var(--muted)">${fmt(variaveis)}</span></div>
     <div class="summary-row"><span>Saldo líquido</span><span style="color:${saldo>=0?'var(--green)':'var(--red)'}">${fmt(saldo)}</span></div>
     <div class="summary-row"><span>Taxa de economia</span><span style="color:${taxa>=20?'var(--green)':taxa>=0?'var(--blue)':'var(--red)'}">${taxa}%</span></div>
     <div class="summary-row"><span>Média diária gasta</span><span>${fmt(media)}</span></div>
@@ -672,7 +774,6 @@ function renderMonthlySummary(){
     <div class="summary-row"><span>Lançamentos</span><span>${list.length}</span></div>`;
 }
 
-// ─── START ────────────────────────────────────────────────
 init();
 </script>
 </body>
